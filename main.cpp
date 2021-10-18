@@ -1,6 +1,7 @@
 #include <iostream>
 #include <random>
 #include <cmath>
+#include <fstream>
 using namespace std;
 
 struct Particula{
@@ -57,9 +58,8 @@ int main(int argc, char* argv[]) {
         return -1;
     }else{
         //[-------------------Creación de Arrays-------------------]
-        if(isdigit(num_objects)){
-
-        }
+        ofstream file;
+        file.open("/home/carlos/CLionProjects/Proyecto_1_Arqui/init_config.txt");
 
         std::vector<Particula> particulas(num_objects);
 
