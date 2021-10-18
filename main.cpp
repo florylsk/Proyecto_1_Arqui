@@ -76,6 +76,9 @@ int main(int argc, char* argv[]) {
             particulas[i].Z = dis(generator);
             particulas[i].mass = d(generator);
         }
+
+
+
         //cout << "Terminado" << endl;
 
 
