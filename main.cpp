@@ -53,8 +53,7 @@ int main(int argc, char* argv[]) {
 
         }
 
-
-        Particula *particulas=new Particula[num_objects];
+        std::vector<Particula> particulas(num_objects);
 
         //[---------------------Generador de números------------------------]
 
