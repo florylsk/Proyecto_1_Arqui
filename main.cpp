@@ -1,5 +1,6 @@
 #include <iostream>
 #include <random>
+#include <cmath>
 using namespace std;
 
 struct Particula{
@@ -56,9 +57,10 @@ int main(int argc, char* argv[]) {
         std::vector<Particula> particulas(num_objects);
 
         //[---------------------Generador de números------------------------]
-
+        //Esto podriamos meterlo en una función, Iteramos con un for y hacemos esto para cada particula
         mt19937_64 generator(random_seed);
         std::uniform_real_distribution<double> dis(0.0, size_enclosure);
+        std::normal_distribution<double> d{pow(10.0,21.0), pow(10.0, 15.0)};
         //uso para generar un valor: double val1 = dis(generator);
 
 
