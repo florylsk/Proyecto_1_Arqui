@@ -6,11 +6,9 @@
 
 #IncludeRegexTransform: 
 
-/home/carlos/CLionProjects/Proyecto_1_Arqui/main.cpp
+C:/Users/Max Power/Documents/Proyecto_1_Arqui/main.cpp
 iostream
 -
 random
--
-cmath
 -
 

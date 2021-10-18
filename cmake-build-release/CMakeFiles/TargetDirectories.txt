@@ -1,3 +1,3 @@
-/home/carlos/CLionProjects/Proyecto_1_Arqui/cmake-build-release/CMakeFiles/rebuild_cache.dir
-/home/carlos/CLionProjects/Proyecto_1_Arqui/cmake-build-release/CMakeFiles/edit_cache.dir
-/home/carlos/CLionProjects/Proyecto_1_Arqui/cmake-build-release/CMakeFiles/Proyecto_1_Arqui.dir
+C:/Users/Max Power/Documents/Proyecto_1_Arqui/cmake-build-release/CMakeFiles/rebuild_cache.dir
+C:/Users/Max Power/Documents/Proyecto_1_Arqui/cmake-build-release/CMakeFiles/Proyecto_1_Arqui.dir
+C:/Users/Max Power/Documents/Proyecto_1_Arqui/cmake-build-release/CMakeFiles/edit_cache.dir

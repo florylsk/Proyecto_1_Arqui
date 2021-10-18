@@ -1,7 +1,6 @@
 #include <iostream>
 #include <random>
 #include <cmath>
-#include <fstream>
 using namespace std;
 
 struct Particula{
@@ -57,12 +56,10 @@ int main(int argc, char* argv[]) {
         cerr << "El Intervalo de Tiempo debe ser Mayor que 0" << endl;
         return -1;
     }else{
-
-        ofstream file;
-        file.open("/home/carlos/CLionProjects/Proyecto_1_Arqui/init_config.txt");
-
-
         //[-------------------Creación de Arrays-------------------]
+        if(isdigit(num_objects)){
+
+        }
 
         std::vector<Particula> particulas(num_objects);
 
