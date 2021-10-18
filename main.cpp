@@ -2,6 +2,8 @@
 #include <random>
 #include <cmath>
 #include <fstream>
+#include <iomanip>
+#include <vector>
 using namespace std;
 
 struct Particula{
