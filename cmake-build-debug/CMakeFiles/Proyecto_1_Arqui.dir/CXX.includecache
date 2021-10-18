@@ -11,4 +11,12 @@ iostream
 -
 random
 -
+cmath
+-
+fstream
+-
+iomanip
+-
+vector
+-
 
