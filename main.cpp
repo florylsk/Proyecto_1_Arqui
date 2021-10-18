@@ -53,16 +53,26 @@ int main(int argc, char* argv[]) {
 
         }
 
-        struct Particula particulas[num_objects];
+
+        Particula *particulas=new Particula[num_objects];
 
         //[---------------------Generador de números------------------------]
-        //int seed = ;
+
         mt19937_64 generator(random_seed);
         std::uniform_real_distribution<double> dis(0.0, size_enclosure);
+        //uso para generar un valor: double val1 = dis(generator);
 
 
 
-        //cout << "Hello, World!" << endl;
+
+
+
+
+
+
+
+
+
         return 0;
     }
 
