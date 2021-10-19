@@ -56,7 +56,7 @@ void colision_particulas(Particula A, Particula B, int posB, vector<Particula> &
 
 }
 
-int generar_particulas(vector<Particula> &particulas,vector<int> &modulos,mt19937_64 &generator,uniform_real_distribution<double> &dis,normal_distribution<double> &d){
+int generar_particulas(vector<Particula> &particulas,mt19937_64 &generator,uniform_real_distribution<double> &dis,normal_distribution<double> &d){
     for(int i = 0; i < num_objects ; i++){
         particulas[i].posicion[0] = dis(generator);
         particulas[i].posicion[1] = dis(generator);
@@ -70,18 +70,6 @@ int generar_particulas(vector<Particula> &particulas,vector<int> &modulos,mt1993
         particulas[i].mass = d(generator);
 
 
-    }
-    //comprobar que no hay 2 con el mismo módulo(misma posicion)
-    //modulo = sqrt((pow(particulas[i].X,2))+pow(particulas[i].Y,2)+pow(particulas[i].Z,2));
-    for (int j=0;j<num_objects;j++){
-        modulos[j] = sqrt((pow(particulas[j].posicion[0],2))+pow(particulas[j].posicion[1],2)+pow(particulas[j].posicion[2],2));
-    }
-    for (int i=0;i<num_objects;i++){
-        for (int j=0;j<num_objects;j++){
-            if (modulos[i]==modulos[j] && i!=j){
-                //hacer algo
-            }
-        }
     }
 
     return 0;
@@ -114,6 +102,7 @@ void actualizar_posicion(Particula &p){
     p.posicion[0]+= p.velocidad[0]*time_step;
     p.posicion[1]+= p.velocidad[1]*time_step;
     p.posicion[2]+= p.velocidad[2]*time_step;
+
 }
 void final_config(vector<Particula> &particulas){
     fstream file;
@@ -177,7 +166,7 @@ int main(int argc, char* argv[]) {
     vector<Particula> particulas(num_objects);
     vector<int> modulos(num_objects);
 
-    if(generar_particulas(particulas,modulos,generator,dis,d)==-1){
+    if(generar_particulas(particulas,generator,dis,d)==-1){
         cerr<<"fallo al generar las particulas";
     }
     if(init_config(particulas)==-1){
