@@ -79,9 +79,9 @@ int generar_particulas(vector<Particula> &particulas,mt19937_64 &generator,unifo
 int fuerza_gravitatoria(Particula &p, vector<Particula> &particulas){
     for(int i=0;i<num_objects;i++){
         if(&p != &particulas[i] ){
-            p.fuerza[0]+=(G*p.mass*particulas[i].mass*(particulas[i].posicion[0]-p.posicion[0]))/(pow((abs(particulas[i].posicion[0]-p.posicion[0])),3));
-            p.fuerza[1]+=(G*p.mass*particulas[i].mass*(particulas[i].posicion[1]-p.posicion[1]))/(pow((abs(particulas[i].posicion[1]-p.posicion[1])),3));
-            p.fuerza[2]+=(G*p.mass*particulas[i].mass*(particulas[i].posicion[2]-p.posicion[2]))/(pow((abs(particulas[i].posicion[2]-p.posicion[2])),3));
+            p.fuerza[0]+=(G*p.mass*particulas[i].mass*(particulas[i].posicion[0]-p.posicion[0]))/(pow((fabs(particulas[i].posicion[0]-p.posicion[0])),3));
+            p.fuerza[1]+=(G*p.mass*particulas[i].mass*(particulas[i].posicion[1]-p.posicion[1]))/(pow((fabs(particulas[i].posicion[1]-p.posicion[1])),3));
+            p.fuerza[2]+=(G*p.mass*particulas[i].mass*(particulas[i].posicion[2]-p.posicion[2]))/(pow((fabs(particulas[i].posicion[2]-p.posicion[2])),3));
         }
     }
     return 0;
@@ -102,6 +102,9 @@ void actualizar_posicion(Particula &p){
     p.posicion[0]+= p.velocidad[0]*time_step;
     p.posicion[1]+= p.velocidad[1]*time_step;
     p.posicion[2]+= p.velocidad[2]*time_step;
+    p.fuerza[0]=0;
+    p.fuerza[1]=0;
+    p.fuerza[2]=0;
 
 }
 void final_config(vector<Particula> &particulas){
