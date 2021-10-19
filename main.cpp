@@ -31,14 +31,21 @@ double time_step;
 
 int init_config(vector<Particula> &particulas){
     //crea el archivo en cmake-buiild-debug
+    cout<<"Particula 1:"<<"\nX:"<<particulas[1].X<<"\nY:"<<particulas[1].Y<<"\nZ:"<<particulas[1].Z<<"\nVx:"<<particulas[1].Vx<<"\nVy:"<<particulas[1].Vy<<"\nVz:"<<particulas[1].Vz<<endl;
     fstream file;
     file.open("init_config.txt",fstream::in | fstream::out | fstream::trunc);
     file << setprecision(3) << size_enclosure << " " << setprecision(3) << time_step << " " << setprecision(3) << num_objects << endl;
     int i;
     for(i = 0; i < num_objects; i++){
-        file << setprecision(3) << particulas[i].X << " " << setprecision(3) << particulas[i].Y << " " << setprecision(3) << particulas[i].Z;
-        file << setprecision(3) << particulas[i].Vx << " " << setprecision(3) << particulas[i].Vy << " " << setprecision(3) << particulas[i].Vz;
-        file << setprecision(3) << particulas[i].mass << endl;
+        //file << setprecision(3) << particulas[i].X << " " << setprecision(3) << particulas[i].Y << " " << setprecision(3) << particulas[i].Z;
+        //file << setprecision(3) << particulas[i].Vx << " " << setprecision(3) << particulas[i].Vy << " " << setprecision(3) << particulas[i].Vz;
+        //file << setprecision(3) << particulas[i].mass << endl;
+        file<<fixed<<showpoint;
+        file<<setprecision(3);
+        file<<particulas[i].X<<" "<<particulas[i].Y<<" "<<particulas[i].Z<<" ";
+        file<<particulas[i].Vx<<" "<<particulas[i].Vy<<" "<<particulas[i].Vz<<" ";
+        file<<particulas[i].mass<<endl;
+
     }
     file.close();
     return 0;
