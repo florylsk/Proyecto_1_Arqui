@@ -30,12 +30,9 @@ double time_step;
 
 
 int init_config(vector<Particula> &particulas){
-    ofstream file;
-    file.open("config/init_config.txt");
-    if(file.bad() == 1){
-        cerr << "No se pudo abrir el archivo" << endl;
-        return -1;
-    }
+    //crea el archivo en cmake-buiild-debug
+    fstream file;
+    file.open("init_config.txt",fstream::in | fstream::out | fstream::trunc);
     file << setprecision(3) << size_enclosure << " " << setprecision(3) << time_step << " " << setprecision(3) << num_objects << endl;
     int i;
     for(i = 0; i < num_objects; i++){
@@ -43,7 +40,7 @@ int init_config(vector<Particula> &particulas){
         file << setprecision(3) << particulas[i].Vx << " " << setprecision(3) << particulas[i].Vy << " " << setprecision(3) << particulas[i].Vz;
         file << setprecision(3) << particulas[i].mass << endl;
     }
-
+    file.close();
     return 0;
 }
 void colision_particulas(Particula A, Particula B, int posB, vector<Particula> &particulas){
@@ -67,7 +64,7 @@ int generar_particulas(vector<Particula> &particulas,vector<int> &modulos,mt1993
         particulas[i].Vy=0;
         particulas[i].Vz=0;
         particulas[i].mass = d(generator);
-        cout<<"particula "<<i<<"\nX: "<<particulas[i].X<<"\nY: "<<particulas[i].Y<<"\nZ: "<<particulas[i].Z<<"\nmass: "<<particulas[i].mass<<endl;
+
 
     }
     //comprobar que no hay 2 con el mismo módulo(misma posicion)
