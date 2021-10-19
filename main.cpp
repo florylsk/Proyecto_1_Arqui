@@ -74,7 +74,7 @@ int generar_particulas(vector<Particula> &particulas,vector<int> &modulos,mt1993
     //comprobar que no hay 2 con el mismo módulo(misma posicion)
     //modulo = sqrt((pow(particulas[i].X,2))+pow(particulas[i].Y,2)+pow(particulas[i].Z,2));
     for (int j=0;j<num_objects;j++){
-        modulos[j] = sqrt((pow(particulas[j].posicion[0],2))+pow(particulas[j].posicion[2],2)+pow(particulas[j].posicion[3],2));
+        modulos[j] = sqrt((pow(particulas[j].posicion[0],2))+pow(particulas[j].posicion[1],2)+pow(particulas[j].posicion[2],2));
     }
     for (int i=0;i<num_objects;i++){
         for (int j=0;j<num_objects;j++){
@@ -113,12 +113,43 @@ int fuerza_gravitatoria(Particula &p, vector<Particula> &particulas){
 
 
 
-//int aceleracion(vector<Particula> &particulas){}
+void aceleracion_y_velocidad(Particula &p){
+    double accX = (1/p.mass)*p.fuerza[0];
+    double accY = (1/p.mass)*p.fuerza[1];
+    double accZ = (1/p.mass)*p.fuerza[2];
+    p.velocidad[0]+= accX*time_step;
+    p.velocidad[1]+= accY*time_step;
+    p.velocidad[2]+= accZ*time_step;
+}
 
 
 
-//int velocidad(vector<Particula> &particulas){}
+void actualizar_posicion(Particula &p){
+    p.posicion[0]+= p.velocidad[0]*time_step;
+    p.posicion[1]+= p.velocidad[1]*time_step;
+    p.posicion[2]+= p.velocidad[2]*time_step;
+}
+void final_config(vector<Particula> &particulas){
+    fstream file;
+    file.open("final_config.txt",fstream::in | fstream::out | fstream::trunc);
+    file<<fixed<<showpoint;
+    file<<setprecision(3);
+    file << size_enclosure<<" "<<time_step<<" "<<num_objects<<endl;
+    for(int i = 0; i < num_objects; i++){
 
+        file<<particulas[i].posicion[0]<<" "<<particulas[i].posicion[1]<<" "<<particulas[i].posicion[2]<<" ";
+        file<<particulas[i].velocidad[0]<<" "<<particulas[i].velocidad[1]<<" "<<particulas[i].velocidad[2]<<" ";
+        file<<particulas[i].mass<<endl;
+
+    }
+    file.close();
+    return;
+
+
+
+
+
+}
 int main(int argc, char* argv[]) {
     cout << "Has introducido " << argc-1 << " Parametros" << endl;
     //[----------------Control de Parámetros---------------------]
@@ -175,10 +206,8 @@ int main(int argc, char* argv[]) {
     for (int i=0;i<num_iteration;i++){
         for(int j=0;j<num_objects;j++){
             fuerza_gravitatoria(particulas[j],particulas);
-            aceleracion();
-            velocidad();
-            posicion();
-
+            aceleracion_y_velocidad(particulas[j]);
+            actualizar_posicion(particulas[j]);
         }
 
 
