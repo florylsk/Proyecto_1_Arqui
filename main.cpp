@@ -7,25 +7,23 @@
 using namespace std;
 
 struct Particula{
-    double X; //posicion X
-    double Y; //posicion Y
-    double Z; //posicion Z
-    double Vx; //Velocidad en X
-    double Vy; //Velocidad en Y
-    double Vz; //Velocidad en Z
-    double mass; //Masa de la particula
+    double posicion[3];
+    double velocidad[3];
+    double fuerza[3];
+    double mass;
+
 };
 
 const double G= 6.674*(pow(10,-11));
 
-//global variables before init
+//global variables
 int num_objects;
 int num_iteration;
 int random_seed;
 double size_enclosure;
 double time_step;
 
-//global variables after init
+
 
 
 
@@ -33,13 +31,13 @@ int init_config(vector<Particula> &particulas){
     //crea el archivo en cmake-buiild-debug
     fstream file;
     file.open("init_config.txt",fstream::in | fstream::out | fstream::trunc);
-    file << setprecision(3) << size_enclosure << " " << setprecision(3) << time_step << " " << setprecision(3) << num_objects << endl;
-    int i;
-    for(i = 0; i < num_objects; i++){
-        file<<fixed<<showpoint;
-        file<<setprecision(3);
-        file<<particulas[i].X<<" "<<particulas[i].Y<<" "<<particulas[i].Z<<" ";
-        file<<particulas[i].Vx<<" "<<particulas[i].Vy<<" "<<particulas[i].Vz<<" ";
+    file<<fixed<<showpoint;
+    file<<setprecision(3);
+    file << size_enclosure<<" "<<time_step<<" "<<num_objects<<endl;
+    for(int i = 0; i < num_objects; i++){
+
+        file<<particulas[i].posicion[0]<<" "<<particulas[i].posicion[1]<<" "<<particulas[i].posicion[2]<<" ";
+        file<<particulas[i].velocidad[0]<<" "<<particulas[i].velocidad[1]<<" "<<particulas[i].velocidad[2]<<" ";
         file<<particulas[i].mass<<endl;
 
     }
@@ -48,9 +46,9 @@ int init_config(vector<Particula> &particulas){
 }
 void colision_particulas(Particula A, Particula B, int posB, vector<Particula> &particulas){
     A.mass = A.mass + B.mass;
-    A.Vx = A.Vx + B.Vx;
-    A.Vy = A.Vy + B.Vy;
-    A.Vz = A.Vz + B.Vz;
+    A.velocidad[0] = A.velocidad[0] + B.velocidad[0];
+    A.velocidad[1] = A.velocidad[1] + B.velocidad[1];
+    A.velocidad[2] = A.velocidad[2] + B.velocidad[2];
     vector<Particula>::iterator ptr;
     advance(ptr,posB);
     particulas.erase(ptr);
@@ -60,12 +58,15 @@ void colision_particulas(Particula A, Particula B, int posB, vector<Particula> &
 
 int generar_particulas(vector<Particula> &particulas,vector<int> &modulos,mt19937_64 &generator,uniform_real_distribution<double> &dis,normal_distribution<double> &d){
     for(int i = 0; i < num_objects ; i++){
-        particulas[i].X = dis(generator);
-        particulas[i].Y = dis(generator);
-        particulas[i].Z = dis(generator);
-        particulas[i].Vx=0;
-        particulas[i].Vy=0;
-        particulas[i].Vz=0;
+        particulas[i].posicion[0] = dis(generator);
+        particulas[i].posicion[1] = dis(generator);
+        particulas[i].posicion[2] = dis(generator);
+        particulas[i].velocidad[0]=0;
+        particulas[i].velocidad[1]=0;
+        particulas[i].velocidad[2]=0;
+        particulas[i].fuerza[0]=0;
+        particulas[i].fuerza[1]=0;
+        particulas[i].fuerza[2]=0;
         particulas[i].mass = d(generator);
 
 
@@ -73,7 +74,7 @@ int generar_particulas(vector<Particula> &particulas,vector<int> &modulos,mt1993
     //comprobar que no hay 2 con el mismo módulo(misma posicion)
     //modulo = sqrt((pow(particulas[i].X,2))+pow(particulas[i].Y,2)+pow(particulas[i].Z,2));
     for (int j=0;j<num_objects;j++){
-        modulos[j] = sqrt((pow(particulas[j].X,2))+pow(particulas[j].Y,2)+pow(particulas[j].Z,2));
+        modulos[j] = sqrt((pow(particulas[j].posicion[0],2))+pow(particulas[j].posicion[2],2)+pow(particulas[j].posicion[3],2));
     }
     for (int i=0;i<num_objects;i++){
         for (int j=0;j<num_objects;j++){
@@ -86,6 +87,36 @@ int generar_particulas(vector<Particula> &particulas,vector<int> &modulos,mt1993
     return 0;
 
 }
+
+int fuerza_gravitatoria(Particula &p, vector<Particula> &particulas){
+    for(int i=0;i<num_objects;i++){
+        if(&p != &particulas[i] ){
+            p.fuerza[0]+=(G*p.mass*particulas[i].mass*(particulas[i].posicion[0]-p.posicion[0]))/(pow((abs(particulas[i].posicion[0]-p.posicion[0])),3));
+            p.fuerza[1]+=(G*p.mass*particulas[i].mass*(particulas[i].posicion[1]-p.posicion[1]))/(pow((abs(particulas[i].posicion[1]-p.posicion[1])),3));
+            p.fuerza[2]+=(G*p.mass*particulas[i].mass*(particulas[i].posicion[2]-p.posicion[2]))/(pow((abs(particulas[i].posicion[2]-p.posicion[2])),3));
+        }
+
+
+
+    }
+
+
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+//int aceleracion(vector<Particula> &particulas){}
+
+
+//int velocidad(vector<Particula> &particulas){}
 
 int main(int argc, char* argv[]) {
     cout << "Has introducido " << argc-1 << " Parametros" << endl;
@@ -100,13 +131,6 @@ int main(int argc, char* argv[]) {
     random_seed =atoi(argv[3]);
     size_enclosure = atof(argv[4]);
     time_step =atof(argv[5]);
-    /*PARA DEBUG
-    int num_objects = 5;
-    int num_iteration = 3;
-    int random_seed = 3;
-    double size_enclosure = 20.0;
-    double time_step = 0.3;
-    cout << argv[0] << endl;*/
 
 
     if(num_objects <= 0){
@@ -147,6 +171,17 @@ int main(int argc, char* argv[]) {
     }
 
 
+    for (int i=0;i<num_iteration;i++){
+        for(int j=0;j<num_objects;j++){
+            fuerza_gravitatoria(particulas[j],particulas);
+            aceleracion();
+            velocidad();
+            posicion();
+
+        }
+
+
+    }
 
 
 
