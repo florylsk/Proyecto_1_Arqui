@@ -16,7 +16,7 @@ struct Particula{
     double mass; //Masa de la particula
 };
 
-
+const double G= 6.674*(pow(10,-11));
 
 //global variables before init
 int num_objects;
