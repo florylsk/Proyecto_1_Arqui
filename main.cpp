@@ -16,6 +16,8 @@ struct Particula{
     double mass; //Masa de la particula
 };
 
+
+
 //global variables before init
 int num_objects;
 int num_iteration;
@@ -24,15 +26,10 @@ double size_enclosure;
 double time_step;
 
 //global variables after init
-mt19937_64 generator(random_seed);
-std::uniform_real_distribution<double> dis{0.0, size_enclosure};
-std::normal_distribution<double> d{pow(10.0,21.0), pow(10.0, 15.0)};
-
-std::vector<Particula> particulas(num_objects);
-std::vector<int> modulos(num_objects);
 
 
-int init_config(){
+
+int init_config(vector<Particula> &particulas){
     ofstream file;
     file.open("config/init_config.txt");
     if(file.bad() == 1){
@@ -49,7 +46,7 @@ int init_config(){
 
     return 0;
 }
-void colision_particulas(Particula A, Particula B, int posB){
+void colision_particulas(Particula A, Particula B, int posB, vector<Particula> &particulas){
     A.mass = A.mass + B.mass;
     A.Vx = A.Vx + B.Vx;
     A.Vy = A.Vy + B.Vy;
@@ -61,7 +58,7 @@ void colision_particulas(Particula A, Particula B, int posB){
 
 }
 
-int generar_particulas(){
+int generar_particulas(vector<Particula> &particulas,vector<int> &modulos,mt19937_64 &generator,uniform_real_distribution<double> &dis,normal_distribution<double> &d){
     for(int i = 0; i < num_objects ; i++){
         particulas[i].X = dis(generator);
         particulas[i].Y = dis(generator);
@@ -70,6 +67,7 @@ int generar_particulas(){
         particulas[i].Vy=0;
         particulas[i].Vz=0;
         particulas[i].mass = d(generator);
+        cout<<"particula "<<i<<"\nX: "<<particulas[i].X<<"\nY: "<<particulas[i].Y<<"\nZ: "<<particulas[i].Z<<"\nmass: "<<particulas[i].mass<<endl;
 
     }
     //comprobar que no hay 2 con el mismo módulo(misma posicion)
@@ -90,7 +88,7 @@ int generar_particulas(){
 }
 
 int main(int argc, char* argv[]) {
-    cout << "Has introducido " << argc << " Parametros" << endl;
+    cout << "Has introducido " << argc-1 << " Parametros" << endl;
     //[----------------Control de Parámetros---------------------]
     if(argc != 6){
         cerr << "Número de parámetros Inválido" << endl;
@@ -131,22 +129,21 @@ int main(int argc, char* argv[]) {
         cerr << "Intervalo de Tiempo Inválido" << endl;
         cerr << "El Intervalo de Tiempo debe ser Mayor que 0" << endl;
         return -1;
-    }else{
-
-    int init = init_config();
-    if(init==-1){
-        cerr<<"fallo en el init config";
     }
-    int generarParticulas=generar_particulas();
-    if(generarParticulas==-1){
+
+    mt19937_64 generator(random_seed);
+    uniform_real_distribution<double> dis{0.0, size_enclosure};
+    normal_distribution<double> d{pow(10.0,21.0), pow(10.0, 15.0)};
+
+    vector<Particula> particulas(num_objects);
+    vector<int> modulos(num_objects);
+
+    if(generar_particulas(particulas,modulos,generator,dis,d)==-1){
         cerr<<"fallo al generar las particulas";
     }
 
-
-
-
-
-        return 0;
+    if(init_config(particulas)==-1){
+        cerr<<"fallo en el init config";
     }
 
 
@@ -158,5 +155,5 @@ int main(int argc, char* argv[]) {
 
 
 
-
+    return 0;
 }
