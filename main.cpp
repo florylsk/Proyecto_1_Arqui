@@ -95,22 +95,9 @@ int fuerza_gravitatoria(Particula &p, vector<Particula> &particulas){
             p.fuerza[1]+=(G*p.mass*particulas[i].mass*(particulas[i].posicion[1]-p.posicion[1]))/(pow((abs(particulas[i].posicion[1]-p.posicion[1])),3));
             p.fuerza[2]+=(G*p.mass*particulas[i].mass*(particulas[i].posicion[2]-p.posicion[2]))/(pow((abs(particulas[i].posicion[2]-p.posicion[2])),3));
         }
-
-
-
     }
-
-
-
     return 0;
 }
-
-
-
-
-
-
-
 
 
 void aceleracion_y_velocidad(Particula &p){
@@ -121,7 +108,6 @@ void aceleracion_y_velocidad(Particula &p){
     p.velocidad[1]+= accY*time_step;
     p.velocidad[2]+= accZ*time_step;
 }
-
 
 
 void actualizar_posicion(Particula &p){
@@ -144,9 +130,6 @@ void final_config(vector<Particula> &particulas){
     }
     file.close();
     return;
-
-
-
 
 
 }
@@ -197,11 +180,9 @@ int main(int argc, char* argv[]) {
     if(generar_particulas(particulas,modulos,generator,dis,d)==-1){
         cerr<<"fallo al generar las particulas";
     }
-
     if(init_config(particulas)==-1){
         cerr<<"fallo en el init config";
     }
-
 
     for (int i=0;i<num_iteration;i++){
         for(int j=0;j<num_objects;j++){
@@ -209,15 +190,9 @@ int main(int argc, char* argv[]) {
             aceleracion_y_velocidad(particulas[j]);
             actualizar_posicion(particulas[j]);
         }
-
-
     }
     final_config(particulas);
     cout<<"terminado :)"<<endl;
-
-
-
-
 
 
     return 0;
