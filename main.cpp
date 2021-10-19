@@ -31,15 +31,11 @@ double time_step;
 
 int init_config(vector<Particula> &particulas){
     //crea el archivo en cmake-buiild-debug
-    cout<<"Particula 1:"<<"\nX:"<<particulas[1].X<<"\nY:"<<particulas[1].Y<<"\nZ:"<<particulas[1].Z<<"\nVx:"<<particulas[1].Vx<<"\nVy:"<<particulas[1].Vy<<"\nVz:"<<particulas[1].Vz<<endl;
     fstream file;
     file.open("init_config.txt",fstream::in | fstream::out | fstream::trunc);
     file << setprecision(3) << size_enclosure << " " << setprecision(3) << time_step << " " << setprecision(3) << num_objects << endl;
     int i;
     for(i = 0; i < num_objects; i++){
-        //file << setprecision(3) << particulas[i].X << " " << setprecision(3) << particulas[i].Y << " " << setprecision(3) << particulas[i].Z;
-        //file << setprecision(3) << particulas[i].Vx << " " << setprecision(3) << particulas[i].Vy << " " << setprecision(3) << particulas[i].Vz;
-        //file << setprecision(3) << particulas[i].mass << endl;
         file<<fixed<<showpoint;
         file<<setprecision(3);
         file<<particulas[i].X<<" "<<particulas[i].Y<<" "<<particulas[i].Z<<" ";
@@ -134,7 +130,7 @@ int main(int argc, char* argv[]) {
         cerr << "El Intervalo de Tiempo debe ser Mayor que 0" << endl;
         return -1;
     }
-
+    cout<<"Argumentos:\n"<<"num_objects: "<<num_objects<<"\nnum_iterations: "<<num_iteration<<"\nrandom_seed: "<<random_seed<<"\nsize_enclosure: "<<size_enclosure<<"\ntime_step: "<<time_step<<endl;
     mt19937_64 generator(random_seed);
     uniform_real_distribution<double> dis{0.0, size_enclosure};
     normal_distribution<double> d{pow(10.0,21.0), pow(10.0, 15.0)};
