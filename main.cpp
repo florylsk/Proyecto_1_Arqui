@@ -116,6 +116,7 @@ int fuerza_gravitatoria(Particula &p, vector<Particula> &particulas){
 //int aceleracion(vector<Particula> &particulas){}
 
 
+
 //int velocidad(vector<Particula> &particulas){}
 
 int main(int argc, char* argv[]) {
@@ -182,8 +183,8 @@ int main(int argc, char* argv[]) {
 
 
     }
-
-
+    final_config(particulas);
+    cout<<"terminado :)"<<endl;
 
 
 
