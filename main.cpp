@@ -54,8 +54,9 @@ void colision_particulas(Particula A, Particula B, int posB){
     A.Vx = A.Vx + B.Vx;
     A.Vy = A.Vy + B.Vy;
     A.Vz = A.Vz + B.Vz;
-    posB = posB+1-1;
-    //particulas.erase(posB);
+    vector<Particula>::iterator ptr;
+    advance(ptr,posB);
+    particulas.erase(ptr);
     return;
 
 }
@@ -78,7 +79,7 @@ int generar_particulas(){
     }
     for (int i=0;i<num_objects;i++){
         for (int j=0;j<num_objects;j++){
-            if (modulos[i]==modulos[j]){
+            if (modulos[i]==modulos[j] && i!=j){
                 //hacer algo
             }
         }
