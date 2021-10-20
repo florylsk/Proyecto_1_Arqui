@@ -17,9 +17,9 @@ struct Particula{
 const double G= 6.674*(pow(10,-11));
 
 //global variables
-unsigned int num_objects;
-unsigned int num_iteration;
-unsigned int random_seed;
+int num_objects;
+int num_iteration;
+int random_seed;
 double size_enclosure;
 double time_step;
 double norma;
@@ -36,7 +36,7 @@ int init_config(vector<Particula> &particulas){
     file<<fixed<<showpoint;
     file<<setprecision(3);
     file << size_enclosure<<" "<<time_step<<" "<<num_objects<<endl;
-    for(unsigned int i = 0; i < num_objects; i++){
+    for(int i = 0; i < num_objects; i++){
 
         file<<particulas[i].posicion[0]<<" "<<particulas[i].posicion[1]<<" "<<particulas[i].posicion[2]<<" ";
         file<<particulas[i].velocidad[0]<<" "<<particulas[i].velocidad[1]<<" "<<particulas[i].velocidad[2]<<" ";
@@ -46,7 +46,7 @@ int init_config(vector<Particula> &particulas){
     file.close();
     return 0;
 }
-void colision_particulas(Particula &A, Particula &B,  vector<Particula> &particulas,unsigned int pos){
+void colision_particulas(Particula &A, Particula &B,  vector<Particula> &particulas,int pos){
     A.mass = A.mass + B.mass;
     A.velocidad[0] = A.velocidad[0] + B.velocidad[0];
     A.velocidad[1] = A.velocidad[1] + B.velocidad[1];
@@ -56,7 +56,7 @@ void colision_particulas(Particula &A, Particula &B,  vector<Particula> &particu
 }
 
 int generar_particulas(vector<Particula> &particulas,mt19937_64 &generator,uniform_real_distribution<double> &dis,normal_distribution<double> &d){
-    for(unsigned int i = 0; i < num_objects ; i++){
+    for(int i = 0; i < num_objects ; i++){
         particulas[i].posicion[0] = dis(generator);
         particulas[i].posicion[1] = dis(generator);
         particulas[i].posicion[2] = dis(generator);
@@ -74,7 +74,7 @@ int generar_particulas(vector<Particula> &particulas,mt19937_64 &generator,unifo
 }
 
 void fuerza_gravitatoria(Particula &p, vector<Particula> &particulas){
-    for(unsigned int i=0;i<num_objects;i++){
+    for(int i=0;i<num_objects;i++){
         if(&p != &particulas[i] ){
             if((particulas[i].posicion[0]-p.posicion[0])==0){
                 continue;
@@ -151,7 +151,7 @@ void final_config(vector<Particula> &particulas){
     file<<fixed<<showpoint;
     file<<setprecision(3);
     file << size_enclosure<<" "<<time_step<<" "<<num_objects<<endl;
-    for(unsigned int i = 0; i < num_objects; i++){
+    for(int i = 0; i < num_objects; i++){
 
         file<<particulas[i].posicion[0]<<" "<<particulas[i].posicion[1]<<" "<<particulas[i].posicion[2]<<" ";
         file<<particulas[i].velocidad[0]<<" "<<particulas[i].velocidad[1]<<" "<<particulas[i].velocidad[2]<<" ";
@@ -203,6 +203,7 @@ int main(int argc, char* argv[]) {
     normal_distribution<double> d{pow(10.0,21.0), pow(10.0, 15.0)};
 
     vector<Particula> particulas(num_objects);
+    vector<int> modulos(num_objects);
 
     if(generar_particulas(particulas,generator,dis,d)==-1){
         cerr<<"fallo al generar las particulas";
@@ -211,8 +212,8 @@ int main(int argc, char* argv[]) {
         cerr<<"fallo en el init config";
     }
 
-    for (unsigned int i=0;i<num_iteration;i++){
-        for(unsigned int j=0;j<num_objects;j++){
+    for (int i=0;i<num_iteration;i++){
+        for(int j=0;j<num_objects;j++){
             fuerza_gravitatoria(particulas[j],particulas);
             aceleracion_y_velocidad(particulas[j]);
             actualizar_posicion(particulas[j]);
