@@ -86,7 +86,7 @@ void fuerza_gravitatoria(Particula &p, vector<Particula> &particulas){
                 continue;
             }
             else {
-                norma=pow((sqrt(pow((particulas[i].posicion[0] - p.posicion[0]),2)+pow((particulas[i].posicion[1] - p.posicion[1]),2)+pow((particulas[i].posicion[2] - p.posicion[2]),2))),3);
+                norma=((std::sqrt(((particulas[i].posicion[0] - p.posicion[0])*(particulas[i].posicion[0] - p.posicion[0]))+((particulas[i].posicion[1] - p.posicion[1])*(particulas[i].posicion[1] - p.posicion[1]))+((particulas[i].posicion[2] - p.posicion[2])*(particulas[i].posicion[2] - p.posicion[2]))))*(std::sqrt(((particulas[i].posicion[0] - p.posicion[0])*(particulas[i].posicion[0] - p.posicion[0]))+((particulas[i].posicion[1] - p.posicion[1])*(particulas[i].posicion[1] - p.posicion[1]))+((particulas[i].posicion[2] - p.posicion[2])*(particulas[i].posicion[2] - p.posicion[2]))))*(std::sqrt(((particulas[i].posicion[0] - p.posicion[0])*(particulas[i].posicion[0] - p.posicion[0]))+((particulas[i].posicion[1] - p.posicion[1])*(particulas[i].posicion[1] - p.posicion[1]))+((particulas[i].posicion[2] - p.posicion[2])*(particulas[i].posicion[2] - p.posicion[2])))));
                 p.fuerza[0] += (G * p.mass * particulas[i].mass * (particulas[i].posicion[0] - p.posicion[0])) /
                                norma;
                 p.fuerza[1] += (G * p.mass * particulas[i].mass * (particulas[i].posicion[1] - p.posicion[1])) /
