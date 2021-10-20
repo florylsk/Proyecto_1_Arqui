@@ -203,14 +203,9 @@ int main(int argc, char* argv[]) {
     normal_distribution<double> d{pow(10.0,21.0), pow(10.0, 15.0)};
 
     vector<Particula> particulas(num_objects);
-    vector<int> modulos(num_objects);
 
-    if(generar_particulas(particulas,generator,dis,d)==-1){
-        cerr<<"fallo al generar las particulas";
-    }
-    if(init_config(particulas)==-1){
-        cerr<<"fallo en el init config";
-    }
+    generar_particulas(particulas,generator,dis,d);
+    init_config(particulas);
 
     for (int i=0;i<num_iteration;i++){
         for(int j=0;j<num_objects;j++){
