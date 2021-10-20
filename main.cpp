@@ -13,7 +13,7 @@ struct Particula{
     double mass;
 
 };
-
+//const double G=00000000006674;
 const double G= 6.674*(pow(10,-11));
 
 //global variables
@@ -71,6 +71,21 @@ int generar_particulas(vector<Particula> &particulas,mt19937_64 &generator,unifo
 
     return 0;
 
+}
+
+int comprobar_colision(Particula &p, vector<Particula> &particulas){
+    for(int i = 0; i < num_objects; i++){
+        if(&p != &particulas[i]){
+            if((particulas[i].posicion[0]-p.posicion[0]) < 1 && (particulas[i].posicion[0]-p.posicion[0]) > -1){
+                if((particulas[i].posicion[1]-p.posicion[1]) < 1 && (particulas[i].posicion[1]-p.posicion[1]) > -1){
+                    if((particulas[i].posicion[2]-p.posicion[2]) < 1 && (particulas[i].posicion[2]-p.posicion[2]) > -1){
+                        return i;
+                    }
+                }
+            }
+        }
+    }
+    return -1;
 }
 
 void fuerza_gravitatoria(Particula &p, vector<Particula> &particulas){
@@ -212,6 +227,11 @@ int main(int argc, char* argv[]) {
             fuerza_gravitatoria(particulas[j],particulas);
             aceleracion_y_velocidad(particulas[j]);
             actualizar_posicion(particulas[j]);
+            //Cambios de hoy borrar estas 3 lineas de abajo
+            int pos = comprobar_colision(particulas[j], particulas);
+            if(pos != -1){
+                colision_particulas(particulas[j], particulas[pos], particulas, pos);
+            }
 
         }
     }
