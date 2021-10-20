@@ -22,8 +22,10 @@ int num_iteration;
 int random_seed;
 double size_enclosure;
 double time_step;
-
-
+double norma;
+double accX;
+double accY;
+double accZ;
 
 
 
@@ -44,14 +46,12 @@ int init_config(vector<Particula> &particulas){
     file.close();
     return 0;
 }
-void colision_particulas(Particula A, Particula B, int posB, vector<Particula> &particulas){
+void colision_particulas(Particula &A, Particula &B,  vector<Particula> &particulas,int pos){
     A.mass = A.mass + B.mass;
     A.velocidad[0] = A.velocidad[0] + B.velocidad[0];
     A.velocidad[1] = A.velocidad[1] + B.velocidad[1];
     A.velocidad[2] = A.velocidad[2] + B.velocidad[2];
-    vector<Particula>::iterator ptr;
-    advance(ptr,posB);
-    particulas.erase(ptr);
+    particulas.erase(particulas.begin()+pos);
     return;
 
 }
@@ -68,15 +68,13 @@ int generar_particulas(vector<Particula> &particulas,mt19937_64 &generator,unifo
         particulas[i].fuerza[1]=0;
         particulas[i].fuerza[2]=0;
         particulas[i].mass = d(generator);
-
-
     }
 
     return 0;
 
 }
 
-int fuerza_gravitatoria(Particula &p, vector<Particula> &particulas){
+void fuerza_gravitatoria(Particula &p, vector<Particula> &particulas){
     for(int i=0;i<num_objects;i++){
         if(&p != &particulas[i] ){
             if((particulas[i].posicion[0]-p.posicion[0])==0){
@@ -89,7 +87,7 @@ int fuerza_gravitatoria(Particula &p, vector<Particula> &particulas){
                 continue;
             }
             else {
-                double norma=pow((sqrt(pow((particulas[i].posicion[0] - p.posicion[0]),2)+pow((particulas[i].posicion[1] - p.posicion[1]),2)+pow((particulas[i].posicion[2] - p.posicion[2]),2))),3);
+                norma=pow((sqrt(pow((particulas[i].posicion[0] - p.posicion[0]),2)+pow((particulas[i].posicion[1] - p.posicion[1]),2)+pow((particulas[i].posicion[2] - p.posicion[2]),2))),3);
                 p.fuerza[0] += (G * p.mass * particulas[i].mass * (particulas[i].posicion[0] - p.posicion[0])) /
                                norma;
                 p.fuerza[1] += (G * p.mass * particulas[i].mass * (particulas[i].posicion[1] - p.posicion[1])) /
@@ -99,14 +97,13 @@ int fuerza_gravitatoria(Particula &p, vector<Particula> &particulas){
             }
         }
     }
-    return 0;
 }
 
 
 void aceleracion_y_velocidad(Particula &p){
-    double accX = p.fuerza[0]/p.mass;
-    double accY = p.fuerza[1]/p.mass;
-    double accZ = p.fuerza[2]/p.mass;
+    accX = p.fuerza[0]/p.mass;
+    accY = p.fuerza[1]/p.mass;
+    accZ = p.fuerza[2]/p.mass;
     p.velocidad[0]+= accX*time_step;
     p.velocidad[1]+= accY*time_step;
     p.velocidad[2]+= accZ*time_step;
@@ -141,6 +138,7 @@ void actualizar_posicion(Particula &p){
         p.posicion[2]=size_enclosure;
         p.velocidad[2]=-p.velocidad[2];
     }
+
 
 
     p.fuerza[0]=0;
@@ -221,6 +219,7 @@ int main(int argc, char* argv[]) {
             fuerza_gravitatoria(particulas[j],particulas);
             aceleracion_y_velocidad(particulas[j]);
             actualizar_posicion(particulas[j]);
+
         }
     }
     final_config(particulas);
