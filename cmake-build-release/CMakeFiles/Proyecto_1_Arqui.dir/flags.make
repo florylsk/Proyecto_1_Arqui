@@ -6,5 +6,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = 
 
-CXX_FLAGS = -O3 -DNDEBUG -Wall -Wextra -Werror -pedantic -pedantic-errors -std=gnu++2a
+CXX_FLAGS = -O3 -DNDEBUG -Wall -Wextra -Wno-deprecated -Werror -pedantic -pedantic-errors -O3 -DNDEBUG -DCMAKE_BUILD_TYPE=Release -std=gnu++2a
 

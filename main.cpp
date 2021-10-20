@@ -89,12 +89,13 @@ int fuerza_gravitatoria(Particula &p, vector<Particula> &particulas){
                 continue;
             }
             else {
+                double norma=pow((sqrt(pow((particulas[i].posicion[0] - p.posicion[0]),2)+pow((particulas[i].posicion[1] - p.posicion[1]),2)+pow((particulas[i].posicion[2] - p.posicion[2]),2))),3);
                 p.fuerza[0] += (G * p.mass * particulas[i].mass * (particulas[i].posicion[0] - p.posicion[0])) /
-                               (pow((fabs(particulas[i].posicion[0] - p.posicion[0])), 3));
+                               norma;
                 p.fuerza[1] += (G * p.mass * particulas[i].mass * (particulas[i].posicion[1] - p.posicion[1])) /
-                               (pow((fabs(particulas[i].posicion[1] - p.posicion[1])), 3));
+                               norma;
                 p.fuerza[2] += (G * p.mass * particulas[i].mass * (particulas[i].posicion[2] - p.posicion[2])) /
-                               (pow((fabs(particulas[i].posicion[2] - p.posicion[2])), 3));
+                               norma;
             }
         }
     }
@@ -103,9 +104,9 @@ int fuerza_gravitatoria(Particula &p, vector<Particula> &particulas){
 
 
 void aceleracion_y_velocidad(Particula &p){
-    double accX = (1/p.mass)*p.fuerza[0];
-    double accY = (1/p.mass)*p.fuerza[1];
-    double accZ = (1/p.mass)*p.fuerza[2];
+    double accX = p.fuerza[0]/p.mass;
+    double accY = p.fuerza[1]/p.mass;
+    double accZ = p.fuerza[2]/p.mass;
     p.velocidad[0]+= accX*time_step;
     p.velocidad[1]+= accY*time_step;
     p.velocidad[2]+= accZ*time_step;
@@ -132,7 +133,7 @@ void actualizar_posicion(Particula &p){
         p.posicion[0]=size_enclosure;
         p.velocidad[0]=-p.velocidad[0];
     }
-     if (p.posicion[1]>=size_enclosure){
+    if (p.posicion[1]>=size_enclosure){
         p.posicion[1]=size_enclosure;
         p.velocidad[1]=-p.velocidad[1];
     }
@@ -178,7 +179,6 @@ int main(int argc, char* argv[]) {
     random_seed =atoi(argv[3]);
     size_enclosure = atof(argv[4]);
     time_step =atof(argv[5]);
-
 
     if(num_objects <= 0){
         cerr << "Número de partículas Inválido" << endl;
