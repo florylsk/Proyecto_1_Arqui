@@ -13,10 +13,9 @@ struct Particula{
     double mass;
 
 };
-//const double G=00000000006674;
 const double G= 6.674*(pow(10,-11));
 
-//global variables
+//variables globales
 int num_objects;
 int num_iteration;
 int random_seed;
@@ -28,9 +27,8 @@ double accY;
 double accZ;
 
 
-
+//crea el archivo init_config.txt
 int init_config(vector<Particula> &particulas){
-    //crea el archivo en cmake-buiild-debug
     fstream file;
     file.open("init_config.txt",fstream::in | fstream::out | fstream::trunc);
     file<<fixed<<showpoint;
@@ -46,6 +44,7 @@ int init_config(vector<Particula> &particulas){
     file.close();
     return 0;
 }
+//si 2 particulas han colisionado
 void colision_particulas(Particula &A, Particula &B,  vector<Particula> &particulas,int pos){
     A.mass = A.mass + B.mass;
     A.velocidad[0] = A.velocidad[0] + B.velocidad[0];
@@ -54,7 +53,7 @@ void colision_particulas(Particula &A, Particula &B,  vector<Particula> &particu
     particulas.erase(particulas.begin()+pos);
 
 }
-
+//generar las particulas
 int generar_particulas(vector<Particula> &particulas,mt19937_64 &generator,uniform_real_distribution<double> &dis,normal_distribution<double> &d){
     for(int i = 0; i < num_objects ; i++){
         particulas[i].posicion[0] = dis(generator);
@@ -72,22 +71,19 @@ int generar_particulas(vector<Particula> &particulas,mt19937_64 &generator,unifo
     return 0;
 
 }
-
+//comprobar si 2 particulas han colisionado
 int comprobar_colision(Particula &p, vector<Particula> &particulas){
     for(int i = 0; i < num_objects; i++){
         if(&p != &particulas[i]){
-            if((particulas[i].posicion[0]-p.posicion[0]) < 1 && (particulas[i].posicion[0]-p.posicion[0]) > -1){
-                if((particulas[i].posicion[1]-p.posicion[1]) < 1 && (particulas[i].posicion[1]-p.posicion[1]) > -1){
-                    if((particulas[i].posicion[2]-p.posicion[2]) < 1 && (particulas[i].posicion[2]-p.posicion[2]) > -1){
-                        return i;
-                    }
-                }
+            if (particulas[i].posicion[0]==p.posicion[0] && particulas[i].posicion[1]==p.posicion[1] &&particulas[i].posicion[2]==p.posicion[2]){
+                return i;
             }
         }
     }
     return -1;
 }
-
+//cada particula recorre toda la lista de particulas
+//y se le suma la fuerza que le aplica cada una
 void fuerza_gravitatoria(Particula &p, vector<Particula> &particulas){
     for(int i=0;i<num_objects;i++){
         if(&p != &particulas[i] ){
@@ -113,7 +109,7 @@ void fuerza_gravitatoria(Particula &p, vector<Particula> &particulas){
     }
 }
 
-
+//a=f/m,v=v0+a*dt
 void aceleracion_y_velocidad(Particula &p){
     accX = p.fuerza[0]/p.mass;
     accY = p.fuerza[1]/p.mass;
@@ -123,7 +119,7 @@ void aceleracion_y_velocidad(Particula &p){
     p.velocidad[2]+= accZ*time_step;
 }
 
-
+//x=x0+v*dt
 void actualizar_posicion(Particula &p){
     p.posicion[0]+= p.velocidad[0]*time_step;
     p.posicion[1]+= p.velocidad[1]*time_step;
@@ -153,13 +149,13 @@ void actualizar_posicion(Particula &p){
         p.velocidad[2]=-p.velocidad[2];
     }
 
-
-
+    //reiniciar las fuerzas despues de actualizar la posicion
     p.fuerza[0]=0;
     p.fuerza[1]=0;
     p.fuerza[2]=0;
 
 }
+//crear el archivo final_config.txt
 void final_config(vector<Particula> &particulas){
     fstream file;
     file.open("final_config.txt",fstream::in | fstream::out | fstream::trunc);
@@ -184,7 +180,7 @@ int main(int argc, char* argv[]) {
         cerr << "Número de parámetros Inválido" << endl;
         return -1;
     }
-    //dar valor a los paremetros
+    //dar valor a las variables globales
     num_objects = atoi(argv[1]);
     num_iteration = atoi(argv[2]);
     random_seed =atoi(argv[3]);
@@ -213,21 +209,20 @@ int main(int argc, char* argv[]) {
         return -1;
     }
     cout<<"Argumentos:\n"<<"num_objects: "<<num_objects<<"\nnum_iterations: "<<num_iteration<<"\nrandom_seed: "<<random_seed<<"\nsize_enclosure: "<<size_enclosure<<"\ntime_step: "<<time_step<<endl;
+    //generacion de numeros aleatorios
     mt19937_64 generator(random_seed);
     uniform_real_distribution<double> dis{0.0, size_enclosure};
     normal_distribution<double> d{pow(10.0,21.0), pow(10.0, 15.0)};
-
+    //crear la lista de particulas, darles valores iniciales y crear el init_config.txt
     vector<Particula> particulas(num_objects);
-
     generar_particulas(particulas,generator,dis,d);
     init_config(particulas);
-
+    //por cada iteracion y particula, realizar las funciones anteriormente descritas
     for (int i=0;i<num_iteration;i++){
         for(int j=0;j<num_objects;j++){
             fuerza_gravitatoria(particulas[j],particulas);
             aceleracion_y_velocidad(particulas[j]);
             actualizar_posicion(particulas[j]);
-            //Cambios de hoy borrar estas 3 lineas de abajo
             int pos = comprobar_colision(particulas[j], particulas);
             if(pos != -1){
                 colision_particulas(particulas[j], particulas[pos], particulas, pos);
@@ -235,9 +230,7 @@ int main(int argc, char* argv[]) {
 
         }
     }
+    //escribir el final_config.txt
     final_config(particulas);
-    cout<<"terminado :)"<<endl;
-
-
     return 0;
 }
